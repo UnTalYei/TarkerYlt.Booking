@@ -1,0 +1,58 @@
+USE master
+IF NOT EXISTS(SELECT * FROM DBO.SYSDATABASES WHERE NAME = 'booking-database-01') -- SI NO EXISTE LA BASE DE DATOS CON ESTE NOMBRE ENTONCES HAREMOS LO SIGUIENTE
+    BEGIN
+		CREATE DATABASE [booking-database-01]
+		SELECT 'NO EXISTE [booking-database-01]'
+	END
+ELSE
+	BEGIN
+		SELECT 'EXISTE [booking-database-01]'
+	END
+GO
+USE [booking-database-01]
+
+IF OBJECT_ID('User') IS NOT NULL
+	BEGIN
+		SELECT 'SELECT TOP 10 * FROM User';
+	END
+	ELSE
+		BEGIN
+			CREATE TABLE [User](
+			[UserId]	INT			PRIMARY KEY IDENTITY,
+			[FirstName]	VARCHAR(50) NOT NULL,
+			[LastName]	VARCHAR(50) NOT NULL,
+			[UserName]	VARCHAR(50) NOT NULL,
+			[Password]	VARCHAR(10) NOT NULL,
+			)
+		END
+GO
+IF OBJECT_ID('Customer') IS NOT NULL
+	BEGIN
+		SELECT 'SELECT * FROM Customer';
+	END
+	ELSE
+		BEGIN
+			CREATE TABLE [Customer](
+			[CustomerId]		INT PRIMARY KEY IDENTITY,
+			[FullName]			VARCHAR(50) NOT NULL,
+			[DocumentNumber]	VARCHAR(50) NOT NULL,
+			)
+		END
+GO
+IF OBJECT_ID('Booking') IS NOT NULL
+	BEGIN
+		SELECT 'SELECT * FROM Booking';
+	END
+	ELSE
+		BEGIN
+			CREATE TABLE [Booking](
+			[BookingId]		INT PRIMARY KEY IDENTITY,
+			[RegisterDate]	DATETIME	NOT NULL,
+			[Code]			VARCHAR(50) NOT NULL,
+			[Type]			VARCHAR(50) NOT NULL,
+			[UserId]		INT			NOT NULL,
+			[CustomerId]	INT			NOT NULL,
+			FOREIGN KEY (UserId)		REFERENCES [User](UserId),
+			FOREIGN KEY (CustomerId)	REFERENCES [Customer](CustomerId)
+			)
+		END
