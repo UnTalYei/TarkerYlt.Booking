@@ -3,6 +3,7 @@ using TarkerYlt.Booking.Application.Database.Customer.Commands.CreateCustomer;
 using TarkerYlt.Booking.Application.Database.Customer.Commands.UpdateCustomer;
 using TarkerYlt.Booking.Application.Database.Customer.Queries.GetAllCustomer;
 using TarkerYlt.Booking.Application.Database.Customer.Queries.GetCustomerById;
+using TarkerYlt.Booking.Application.Database.Customer.Queries.GetCustomerByDocumentNumber;
 using TarkerYlt.Booking.Application.Database.User.Commands.CreateUser;
 using TarkerYlt.Booking.Application.Database.User.Commands.UpdateUser;
 using TarkerYlt.Booking.Application.Database.User.Queries.GetAllUser;
@@ -29,6 +30,7 @@ namespace TarkerYlt.Booking.Application.Configuration
             CreateMap<CustomerEntity, UpdateCustomerModel>().ReverseMap();
             CreateMap<CustomerEntity, GetAllCustomerModel>().ReverseMap();
             CreateMap<CustomerEntity, GetCustomerByIdModel>().ReverseMap();
+            CreateMap<CustomerEntity, GetCustomerByDocumentNumberModel>().ReverseMap();
             #endregion
             #region Booking
             #endregion

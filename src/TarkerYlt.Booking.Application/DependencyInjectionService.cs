@@ -5,6 +5,7 @@ using TarkerYlt.Booking.Application.Database.Customer.Commands.CreateCustomer;
 using TarkerYlt.Booking.Application.Database.Customer.Commands.DeleteCustomer;
 using TarkerYlt.Booking.Application.Database.Customer.Commands.UpdateCustomer;
 using TarkerYlt.Booking.Application.Database.Customer.Queries.GetAllCustomer;
+using TarkerYlt.Booking.Application.Database.Customer.Queries.GetCustomerByDocumentNumber;
 using TarkerYlt.Booking.Application.Database.Customer.Queries.GetCustomerById;
 using TarkerYlt.Booking.Application.Database.User.Commands.CreateUser;
 using TarkerYlt.Booking.Application.Database.User.Commands.DeleteUser;
@@ -27,11 +28,11 @@ namespace TarkerYlt.Booking.Application
             #region User
             services.AddSingleton(mapper.CreateMapper()); //Se crea una única instancia del servicio y se comparte en todas las solicitudes o llamadas.
             services.AddTransient<ICreateUserCommand, CreateUserCommand>(); //Se crear una nueva instancia de la clase cada que es requerido //Nos pemite Inyeccion de dependencias
-            services.AddTransient<IUpdateUserCommand, UpdateUserCommand>(); 
-            services.AddTransient<IDeleteUserCommand, DeleteUserCommand>(); 
-            services.AddTransient<IUpdateUserPasswordCommand, UpdateUserPasswordCommand>(); 
-            services.AddTransient<IGetAllUserQuery, GetAllUserQuery>(); 
-            services.AddTransient<IGetUserByIdQuery, GetUserByIdQuery>(); 
+            services.AddTransient<IUpdateUserCommand, UpdateUserCommand>();
+            services.AddTransient<IDeleteUserCommand, DeleteUserCommand>();
+            services.AddTransient<IUpdateUserPasswordCommand, UpdateUserPasswordCommand>();
+            services.AddTransient<IGetAllUserQuery, GetAllUserQuery>();
+            services.AddTransient<IGetUserByIdQuery, GetUserByIdQuery>();
             services.AddTransient<IGetUserByUserNameAndPasswordQuery, GetUserByUserNameAndPasswordQuery>();
             #endregion
 
@@ -41,6 +42,7 @@ namespace TarkerYlt.Booking.Application
             services.AddTransient<IDeleteCustomerCommand, DeleteCustomerCommand>();
             services.AddTransient<IGetAllCustomerQuery, GetAllCustomerQuery>();
             services.AddTransient<IGetCustomerByIdQuery, GetCustomerByIdQuery>();
+            services.AddTransient<IGetCustomerByDocumentNumberQuery, GetCustomerByDocumentNumberQuery>();
             #endregion
             return services;
         }
