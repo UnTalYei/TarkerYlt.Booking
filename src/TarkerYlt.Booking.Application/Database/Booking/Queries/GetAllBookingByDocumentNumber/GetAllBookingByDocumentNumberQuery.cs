@@ -15,6 +15,7 @@ namespace TarkerYlt.Booking.Application.Database.Booking.Queries.GetAllBookingBy
             var result = await (from booking in _dataBaseService.Booking
                                 join customer in _dataBaseService.Customer
                                 on booking.CustomerId equals customer.CustomerId
+                                where customer.DocumentNumber == documentNumber
                                 select new GetAllBookingByDocumentNumberModel
                                 {
                                     Code = booking.Code,
