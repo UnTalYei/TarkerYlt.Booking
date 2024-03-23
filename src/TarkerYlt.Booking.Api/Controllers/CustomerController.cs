@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace TarkerYlt.Booking.Api.Controllers
 {
     //[Route("api/[controller]")]
-    [Route("api/v1/user")]
+    [Route("api/v1/customer")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class CustomerController : ControllerBase
     {
-        public UserController()
+        public CustomerController()
         {
             
         }
