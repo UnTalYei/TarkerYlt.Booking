@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TarkerYlt.Booking.Application.Configuration;
 using TarkerYlt.Booking.Application.Database.Booking.Commands.CreateBooking;
 using TarkerYlt.Booking.Application.Database.Booking.Queries.GetAllBooking;
+using TarkerYlt.Booking.Application.Database.Booking.Queries.GetAllBookingByDocumentNumber;
 using TarkerYlt.Booking.Application.Database.Customer.Commands.CreateCustomer;
 using TarkerYlt.Booking.Application.Database.Customer.Commands.DeleteCustomer;
 using TarkerYlt.Booking.Application.Database.Customer.Commands.UpdateCustomer;
@@ -49,6 +50,7 @@ namespace TarkerYlt.Booking.Application
             #region Booking
             services.AddTransient<ICreateBookingCommand, CreateBookingCommand>();
             services.AddTransient<IGetAllBookingQuery, GetAllBookingQuery>();
+            services.AddTransient<IGetAllBookingByDocumentNumberQuery, GetAllBookingByDocumentNumberQuery>();
             #endregion
             return services;
         }
