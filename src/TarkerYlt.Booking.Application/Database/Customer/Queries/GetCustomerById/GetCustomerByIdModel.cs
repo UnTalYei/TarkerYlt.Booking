@@ -1,6 +1,6 @@
 ﻿namespace TarkerYlt.Booking.Application.Database.Customer.Queries.GetCustomerById
 {
-    public class GetAllCustomerByIdModel
+    public class GetCustomerByIdModel
     {
         public int CustomerId { get; set; }
         public string FullName { get; set; }
