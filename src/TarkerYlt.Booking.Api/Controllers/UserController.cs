@@ -51,7 +51,7 @@ namespace TarkerYlt.Booking.Api.Controllers
             int userId,
             [FromServices] IDeleteUserCommand deleteUserCommand)
         {
-            if (userId.Equals(0))
+            if (userId == 0)
                 return StatusCode(StatusCodes.Status400BadRequest, ResponseApiService.Response(StatusCodes.Status400BadRequest));
             var data = await deleteUserCommand.Execute(userId);
             if (!data)
@@ -67,7 +67,7 @@ namespace TarkerYlt.Booking.Api.Controllers
             [FromServices] IGetAllUserQuery getAllUserQuery)
         {
             var data = await getAllUserQuery.Execute();
-            if (data.IsNullOrEmpty() || data.Count.Equals(0))
+            if (data == null || data.Count == 0)
                 return StatusCode(StatusCodes.Status404NotFound, ResponseApiService.Response(StatusCodes.Status404NotFound));
 
             return StatusCode(StatusCodes.Status200OK, ResponseApiService.Response(StatusCodes.Status200OK, string.Empty, data));
@@ -78,7 +78,7 @@ namespace TarkerYlt.Booking.Api.Controllers
             int userId,
             [FromServices] IGetUserByIdQuery getUserByIdQuery)
         {
-            if (userId.Equals(0))
+            if (userId == 0)
                 return StatusCode(StatusCodes.Status400BadRequest, ResponseApiService.Response(StatusCodes.Status400BadRequest));
 
             var data = await getUserByIdQuery.Execute(userId);
