@@ -78,7 +78,7 @@ namespace TarkerYlt.Booking.Api.Controllers
             return StatusCode(StatusCodes.Status200OK, ResponseApiService.Response(StatusCodes.Status200OK, string.Empty, data));
         }
         [HttpGet("getByDocumentNumber/{documentNumber}")]
-        public async Task<IActionResult> getByDocumentNumber(
+        public async Task<IActionResult> GetByDocumentNumber(
             string documentNumber,
             [FromServices] IGetCustomerByDocumentNumberQuery getByDocumentNumberQuery)
         {
