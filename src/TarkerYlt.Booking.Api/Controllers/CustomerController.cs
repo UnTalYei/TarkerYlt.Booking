@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using TarkerYlt.Booking.Application.Database.Customer.Commands.CreateCustomer;
 using TarkerYlt.Booking.Application.Database.Customer.Commands.DeleteCustomer;
 using TarkerYlt.Booking.Application.Database.Customer.Commands.UpdateCustomer;
 using TarkerYlt.Booking.Application.Database.Customer.Queries.GetAllCustomer;
 using TarkerYlt.Booking.Application.Database.Customer.Queries.GetCustomerByDocumentNumber;
 using TarkerYlt.Booking.Application.Database.Customer.Queries.GetCustomerById;
-using TarkerYlt.Booking.Application.Database.User.Commands.CreateUser;
-using TarkerYlt.Booking.Application.Database.User.Commands.DeleteUser;
-using TarkerYlt.Booking.Application.Database.User.Commands.UpdateUser;
-using TarkerYlt.Booking.Application.Database.User.Queries.GetAllUser;
 using TarkerYlt.Booking.Application.Exceptions;
 using TarkerYlt.Booking.Application.Features;
 
@@ -24,16 +22,28 @@ namespace TarkerYlt.Booking.Api.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create(
             [FromBody] CreateCustomerModel model,
-            [FromServices] ICreateCustomerCommand createCustomerCommand)
+            [FromServices] ICreateCustomerCommand createCustomerCommand,
+            [FromServices] IValidator<CreateCustomerModel> validator)
         {
+            var validate = await validator.ValidateAsync(model);
+            if (!validate.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ResponseApiService.Response(StatusCodes.Status400BadRequest, string.Empty, validate.Errors));
+            }
             var data = await createCustomerCommand.Execute(model);
             return StatusCode(StatusCodes.Status201Created, ResponseApiService.Response(StatusCodes.Status201Created, string.Empty, data));
         }
         [HttpPut("update")]
         public async Task<IActionResult> Update(
             [FromBody] UpdateCustomerModel model,  
-            [FromServices] IUpdateCustomerCommand updateCustomerCommand)
+            [FromServices] IUpdateCustomerCommand updateCustomerCommand,
+            [FromServices] IValidator<UpdateCustomerModel> validator)
         {
+            var validate = await validator.ValidateAsync(model);
+            if (!validate.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ResponseApiService.Response(StatusCodes.Status400BadRequest, string.Empty, validate.Errors));
+            }
             var data = await updateCustomerCommand.Execute(model);
             return StatusCode(StatusCodes.Status200OK, ResponseApiService.Response(StatusCodes.Status200OK, string.Empty, data));
         }

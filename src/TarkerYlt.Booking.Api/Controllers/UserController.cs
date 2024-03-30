@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 using TarkerYlt.Booking.Application.Database.User.Commands.CreateUser;
 using TarkerYlt.Booking.Application.Database.User.Commands.DeleteUser;
 using TarkerYlt.Booking.Application.Database.User.Commands.UpdateUser;
@@ -22,8 +24,15 @@ namespace TarkerYlt.Booking.Api.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> Create(
             [FromBody] CreateUserModel model,
-            [FromServices] ICreateUserCommand createUserCommand)
+            [FromServices] ICreateUserCommand createUserCommand,
+            [FromServices] IValidator<CreateUserModel> validator)
         {
+            var validate = await validator.ValidateAsync(model);
+            if (!validate.IsValid) 
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ResponseApiService.Response(StatusCodes.Status400BadRequest, string.Empty, validate.Errors));
+            }
+
             var data = await createUserCommand.Execute(model);
             return StatusCode(StatusCodes.Status201Created, ResponseApiService.Response(StatusCodes.Status201Created, string.Empty, data));
         }
@@ -31,8 +40,14 @@ namespace TarkerYlt.Booking.Api.Controllers
         [HttpPut("update")]
         public async Task<IActionResult> Update(
             [FromBody] UpdateUserModel model,
-            [FromServices] IUpdateUserCommand updateUserCommand)
+            [FromServices] IUpdateUserCommand updateUserCommand,
+            [FromServices] IValidator<UpdateUserModel> validator)
         {
+            var validate = await validator.ValidateAsync(model);
+            if (!validate.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ResponseApiService.Response(StatusCodes.Status400BadRequest, string.Empty, validate.Errors));
+            }
             var data = await updateUserCommand.Execute(model);
             return StatusCode(StatusCodes.Status200OK, ResponseApiService.Response(StatusCodes.Status200OK, string.Empty, data));
         }
@@ -40,8 +55,14 @@ namespace TarkerYlt.Booking.Api.Controllers
         [HttpPut("updatePassword")]
         public async Task<IActionResult> UpdatePassword(
            [FromBody] UpdateUserPasswordModel model,
-           [FromServices] IUpdateUserPasswordCommand updateUserPasswordCommand)
+           [FromServices] IUpdateUserPasswordCommand updateUserPasswordCommand,
+           [FromServices] IValidator<UpdateUserPasswordModel> validator)
         {
+            var validate = await validator.ValidateAsync(model);
+            if (!validate.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ResponseApiService.Response(StatusCodes.Status400BadRequest, string.Empty, validate.Errors));
+            }
             var data = await updateUserPasswordCommand.Execute(model);
             return StatusCode(StatusCodes.Status200OK, ResponseApiService.Response(StatusCodes.Status200OK, string.Empty, data));
         }
@@ -91,11 +112,14 @@ namespace TarkerYlt.Booking.Api.Controllers
         [HttpGet("getByUserNameAndPassword/{userName}/{password}")]
         public async Task<IActionResult> GetByUserNameAndPassword(
             string userName, string password,
-            [FromServices] IGetUserByUserNameAndPasswordQuery getUserByUserNameAndPasswordQuery)
+            [FromServices] IGetUserByUserNameAndPasswordQuery getUserByUserNameAndPasswordQuery,
+            [FromServices] IValidator<(string, string)> validator)
         {
-            if (userName.IsNullOrEmpty() || password.IsNullOrEmpty())
-                return StatusCode(StatusCodes.Status400BadRequest, ResponseApiService.Response(StatusCodes.Status400BadRequest));
-
+            var validate = await validator.ValidateAsync((userName, password));
+            if (!validate.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ResponseApiService.Response(StatusCodes.Status400BadRequest, string.Empty, validate.Errors));
+            }
             var data = await getUserByUserNameAndPasswordQuery.Execute(userName, password);
             if (data == null)
                 return StatusCode(StatusCodes.Status404NotFound, ResponseApiService.Response(StatusCodes.Status404NotFound));
