@@ -11,7 +11,9 @@ namespace TarkerYlt.Booking.Persistence
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<DataBaseService>(options =>
+            
             options.UseSqlServer(configuration.GetConnectionString("TarkerYltBookingDb")));
+            //options.UseSqlServer(configuration.GetConnectionString("TarkerYltBookingDbAzure")));
 
             services.AddScoped<IDataBaseService, DataBaseService>();
             return services;
