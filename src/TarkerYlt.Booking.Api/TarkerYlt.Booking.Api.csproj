@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
 	<InvariantGlobalization>false</InvariantGlobalization>
 	<SelfContained>true</SelfContained>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<DocumentationFile>C:\Users\albar\OneDrive\Documentos\Yeison\Repos\TarkerYlt.Booking\src\TarkerYlt.Booking.Api.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +17,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
