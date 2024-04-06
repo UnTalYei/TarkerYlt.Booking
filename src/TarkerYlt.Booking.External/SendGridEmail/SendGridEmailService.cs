@@ -16,8 +16,8 @@ namespace TarkerYlt.Booking.External.SendGridEmail
 
         public async Task<bool> Execute (SendGridEmailRequestModel model)
         {
-            string apiKey = _configuration.GetConnectionString("SendGridEmailKey");
-            string apiUrl = _configuration["UrlSendGrid"];
+            string apiKey = _configuration["SendGridEmailKey"] ?? string.Empty;
+            string apiUrl = _configuration["UrlSendGrid"] ?? string.Empty;
 
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");

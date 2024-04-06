@@ -1,6 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using TarkerYlt.Booking.Application.External.GetTokenJwt;
 using TarkerYlt.Booking.Application.External.SendGridEmail;
+using TarkerYlt.Booking.External.GetTokenJwt;
 using TarkerYlt.Booking.External.SendGridEmail;
 
 namespace TarkerYlt.Booking.External
@@ -10,6 +15,20 @@ namespace TarkerYlt.Booking.External
         public static IServiceCollection AddExternal(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<ISendGridEmailService, SendGridEmailService>();
+            services.AddSingleton<IGetTokenJwtService, GetTokenJwtService>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
+            {
+                option.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SecretKeyJwt"])),
+                    ValidIssuer = configuration["IssuerJwt"],
+                    ValidAudience = configuration["AudienceJwt"]
+                };
+            });
             return services;
         }
     }

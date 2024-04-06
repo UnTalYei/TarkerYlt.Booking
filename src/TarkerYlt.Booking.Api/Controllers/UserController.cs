@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.ComponentModel.DataAnnotations;
 using TarkerYlt.Booking.Application.Database.User.Commands.CreateUser;
 using TarkerYlt.Booking.Application.Database.User.Commands.DeleteUser;
 using TarkerYlt.Booking.Application.Database.User.Commands.UpdateUser;
@@ -10,11 +9,13 @@ using TarkerYlt.Booking.Application.Database.User.Queries.GetAllUser;
 using TarkerYlt.Booking.Application.Database.User.Queries.GetUserById;
 using TarkerYlt.Booking.Application.Database.User.Queries.GetUserByUserNameAndPassword;
 using TarkerYlt.Booking.Application.Exceptions;
+using TarkerYlt.Booking.Application.External.GetTokenJwt;
 using TarkerYlt.Booking.Application.Features;
 
 namespace TarkerYlt.Booking.Api.Controllers
 {
     //[Route("api/[controller]")]
+    [Authorize]
     [Route("api/v1/user")]
     [ApiController]
     [TypeFilter(typeof(ExceptionManager))]
@@ -109,11 +110,13 @@ namespace TarkerYlt.Booking.Api.Controllers
             return StatusCode(StatusCodes.Status200OK, ResponseApiService.Response(StatusCodes.Status200OK, string.Empty, data));
         }
 
+        [AllowAnonymous]
         [HttpGet("getByUserNameAndPassword/{userName}/{password}")]
         public async Task<IActionResult> GetByUserNameAndPassword(
             string userName, string password,
             [FromServices] IGetUserByUserNameAndPasswordQuery getUserByUserNameAndPasswordQuery,
-            [FromServices] IValidator<(string, string)> validator)
+            [FromServices] IValidator<(string, string)> validator,
+            [FromServices] IGetTokenJwtService getTokenJwtService)
         {
             var validate = await validator.ValidateAsync((userName, password));
             if (!validate.IsValid)
@@ -123,6 +126,8 @@ namespace TarkerYlt.Booking.Api.Controllers
             var data = await getUserByUserNameAndPasswordQuery.Execute(userName, password);
             if (data == null)
                 return StatusCode(StatusCodes.Status404NotFound, ResponseApiService.Response(StatusCodes.Status404NotFound));
+
+            data.Token = getTokenJwtService.Execute(data.UserId.ToString());
 
             return StatusCode(StatusCodes.Status200OK, ResponseApiService.Response(StatusCodes.Status200OK, string.Empty, data));
         }
